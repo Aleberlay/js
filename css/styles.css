@@ -1,0 +1,48 @@
+body {
+  font-family: 'Sans', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #080524);
+  color: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  margin-top: 0;
+  color: #ffffff;
+  font-size: 1.8rem;
+}
+
+p {
+  color: #c7d2fe;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+}
+
+button {
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #4f46e5;
+}
