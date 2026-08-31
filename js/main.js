@@ -1,19 +1,14 @@
-// Solicitar al usuario que ingrese su nombre, apellido y edad
-const nombre = prompt("Ingrese su nombre:");
-const aniosTexto = prompt("Ingrese su edad:");
-const anioNacimientoTexto = prompt("Ingrese su año de nacimiento:");
+// Solicitar al usuario que ingrese su nombre, edad y año de nacimiento
+let nombre = prompt("Ingrese su nombre:");
+let anios = parseInt(prompt("Ingrese su edad actual:"));
+let anioNacimiento = parseInt(prompt("Ingrese su año de nacimiento:"));
 
-// Procesar la información ingresada
-const anios = parseInt(aniosTexto);
-const anioNacimiento = parseInt(anioNacimientoTexto);
-
-// Cálculo matemático para verificar la edad ingresada
-const anioActual = new Date().getFullYear();
-let edadCalculada = anioActual - anioNacimiento;
+// Año objetivo para el cálculo
+const ANIO_DESTINO = 2030;
+let edadCalculada = ANIO_DESTINO - anioNacimiento;
 
 // Transferencia de texto
-const mensaje = "Hola " + nombre + ", naciste en el año " + anioNacimiento + " y tienes " + anios + " años.";
+let mensaje = "Hola " + nombre + ", en el año " + ANIO_DESTINO + " tendrás " + edadCalculada + " años.";
 
-// Mostrar el mensaje en la consola
+// Mostrar el mensaje al usuario
 alert(mensaje);
-console.log(mensaje);
