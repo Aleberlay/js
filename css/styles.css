@@ -7,6 +7,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
+  text-align: center;
 }
 
 .card {
@@ -17,6 +18,8 @@ body {
   text-align: center;
   max-width: 400px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -29,20 +32,4 @@ p {
   color: #c7d2fe;
   font-size: 0.95rem;
   margin-bottom: 25px;
-}
-
-button {
-  background-color: #6366f1;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-button:hover {
-  background-color: #4f46e5;
 }
