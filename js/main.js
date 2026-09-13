@@ -26,7 +26,7 @@ function mostrarReportePC(arrayComponentes) {
   }
 }
 
-// 3. Calcular el consumo total de watts de los componentes seleccionados
+// 3. Funcion principal del simulador de armado de PC
 function simuladorArmadoPC() {
   // Push y unshift
   listaComponentes.push("Procesador Pentium G4560");
