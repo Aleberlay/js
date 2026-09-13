@@ -1,6 +1,6 @@
 body {
   font-family: 'Sans', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #080524);
+  background: linear-gradient(135deg, #080524, #120b40);
   color: #f3f4f6;
   display: flex;
   justify-content: center;
@@ -31,5 +31,5 @@ h1 {
 p {
   color: #c7d2fe;
   font-size: 0.95rem;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }

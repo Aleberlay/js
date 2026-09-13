@@ -1,58 +1,61 @@
-// Simulador: Calculadora de Edad y Etapa de Vida para 2030
-const anioActual = 2030;
+// Array
+const listaComponentes = [
+  "Placa de Video RTX 3060",
+  "Placa de Video RTX 4070",
+  "Placa de Video RX 6600",
+  "Procesador Ryzen 5",
+  "Procesador Ryzen 7",
+  "Procesador Core i5"
+];
 
-// 1. Función de Entrada de Datos
-function solicitarDato(mensaje) {
-  return prompt(mensaje);
-}
-
-// 2. Función de Procesamiento con return (Calcula la edad)
-function calcularEdad(anioNacimiento, anioReferencia) {
-  return anioReferencia - anioNacimiento;
-}
-
-// 3. Función Flecha (Determina la etapa de vida según la edad)
-const determinarEtapa = (edad) => {
-  if (edad < 18) {
-    return "menor de edad";
-  } else if (edad < 65) {
-    return "un adulto";
-  } else {
-    return "un adulto mayor";
-  }
+// 1. FLECHA para obtener el consumo de watts de cada componente
+const obtenerConsumoWatts = (componente) => {
+  if (componente === "Placa de Video RX 6700 XT") return 230;
+  if (componente === "Placa de Video RTX 4070") return 200;
+  if (componente === "Placa de Video RTX 3060") return 170;
+  if (componente === "Placa de Video RX 6600") return 132;
+  if (componente === "Procesador Ryzen 7" || componente === "Procesador Core i7") return 105;
+  if (componente === "Procesador Ryzen 5" || componente === "Procesador Core i5") return 65;
 };
 
-// 4. Función de Salida de Datos (Muestra el resultado final)
-function mostrarResultado(nombre, edad, etapa, anio) {
-  alert(nombre + " tendrá " + edad + " años en el " + anio + " y será " + etapa + ".");
+// 2. For...of para mostrar el reporte de componentes
+function mostrarReportePC(arrayComponentes) {
+  console.log("--- LISTA COMPLETA DE COMPONENTES ---");
+  for (const componente of arrayComponentes) {
+    console.log("Producto: " + componente);
+  }
 }
 
-// FLUIJO PRINCIPAL DEL SIMULADOR
-let continuar = true;
+// 3. Calcular el consumo total de watts de los componentes seleccionados
+function simuladorArmadoPC() {
+  // Push y unshift
+  listaComponentes.push("Procesador Pentium G4560");
+  listaComponentes.unshift("Placa de Video RTX 3050");
 
-// BUCLE: Repite la consulta hasta que el usuario decida salir
-while (continuar) {
-  let nombre = solicitarDato("Ingrese el nombre de la persona (o escriba 'ESC' para salir):");
+  // Eliminar el último elemento del array y mostrarlo en una alerta
+  const eliminado = listaComponentes.pop();
+  alert("Se ha eliminado por discontinuidad: " + eliminado);
 
-  // CONDICIONAL: Verificar si el usuario quiere terminar la ejecución
-  if (nombre === null || nombre.toUpperCase() === "ESC") {
-    continuar = false;
-    alert("Gracias por usar el simulador. ¡Hasta luego!");
-    continue;
+  // Splice
+  listaComponentes.splice(2, 1, "Placa de Video RX 6700 XT");
+
+  // Entradas y búsqueda
+  const busqueda = prompt("Ingresá el componente para consultar cuántos Watts gasta:");
+
+  if (listaComponentes.includes(busqueda)) {
+    const posicion = listaComponentes.indexOf(busqueda);
+
+    // Invocación a la función flecha para obtener el consumo (retorno)
+    const wattsConsumo = obtenerConsumoWatts(busqueda);
+
+    alert("En la posición " + posicion + " está '" + busqueda + "' y gasta aproximadamente: " + wattsConsumo + " Watts");
+  } else {
+    alert("El componente '" + busqueda + "' no se encuentra en la lista, por favor verifica la ortografía o el stock");
   }
 
-  let anioNacimiento = parseInt(solicitarDato("Ingrese el año de nacimiento de " + nombre + ":"));
-
-  // Validador de dato ingresado
-  if (isNaN(anioNacimiento) || anioNacimiento > anioActual || anioNacimiento < 1900) {
-    alert("Por favor, ingrese un año de nacimiento válido.");
-    continue;
-  }
-
-  // Invocación de las funciones de procesamiento
-  let edadCalculada = calcularEdad(anioNacimiento, anioActual);
-  let etapa = determinarEtapa(edadCalculada);
-
-  // Resultado final directo
-  mostrarResultado(nombre, edadCalculada, etapa, anioActual);
+  // Invocación a la función de reporte
+  mostrarReportePC(listaComponentes);
 }
+
+// Ejecución de la simulación
+simuladorArmadoPC();
