@@ -24,10 +24,7 @@ const obtenerPrecio = (producto) => {
   if (producto === "Monitor 27 Pulgadas") {
     return 200000;
   }
-  if (producto === "Mousepad XL") {
-    return 15000;
-  }
-  return 10000; // Precio para productos no listados
+  return 10000; // Precio por defecto para productos nuevos agregados dinámicamente
 };
 
 // 3. Función con for...of para listar los productos del carrito
@@ -45,7 +42,7 @@ function simuladorCarrito() {
   while (opcion !== "7" && opcion !== null) {
     opcion = prompt(
       "--- MENÚ DEL CARRITO DE COMPRAS ---\n" +
-      "1. Ver artículos en el carrit\n" +
+      "1. Ver artículos en el carrito\n" +
       "2. Agregar producto al final\n" +
       "3. Agregar producto prioritario al inicio\n" +
       "4. Quitar el último producto agregado\n" +
@@ -67,7 +64,7 @@ function simuladorCarrito() {
         if (nuevoProducto) {
           carrito.push(nuevoProducto);
           alert("Se agregó '" + nuevoProducto + "' al final del carrito.");
-        } else {
+        } else if (nuevoProducto !== null) {
           alert("No ingresaste un producto válido.");
         }
         break;
@@ -78,7 +75,7 @@ function simuladorCarrito() {
         if (productoPrioritario) {
           carrito.unshift(productoPrioritario);
           alert("Se agregó '" + productoPrioritario + "' al inicio de la lista.");
-        } else {
+        } else if (productoPrioritario !== null) {
           alert("No ingresaste un producto válido.");
         }
         break;
@@ -98,18 +95,20 @@ function simuladorCarrito() {
         const indiceTexto = prompt(
           "Ingresá la posición (0 a " + (carrito.length - 1) + ") del producto que deseas cambiar:"
         );
-        const indice = parseInt(indiceTexto);
 
-        if (!isNaN(indice) && indice >= 0 && indice < carrito.length) {
-          const reemplazo = prompt("Ingresá el nombre del nuevo producto:");
-          if (reemplazo) {
-            const anterior = carrito.splice(indice, 1, reemplazo);
-            alert("Se reemplazó '" + anterior[0] + "' por '" + reemplazo + "'.");
+        if (indiceTexto !== null && indiceTexto.trim() !== "") {
+          const indice = Number(indiceTexto);
+          if (Number.isInteger(indice) && indice >= 0 && indice < carrito.length) {
+            const reemplazo = prompt("Ingresá el nombre del nuevo producto:");
+            if (reemplazo) {
+              const anterior = carrito.splice(indice, 1, reemplazo);
+              alert("Se reemplazó '" + anterior[0] + "' por '" + reemplazo + "'.");
+            } else if (reemplazo !== null) {
+              alert("No ingresaste un nombre válido.");
+            }
           } else {
-            alert("No ingresaste un nombre válido.");
+            alert("Posición no válida. Debe ser un número entre 0 y " + (carrito.length - 1) + ".");
           }
-        } else {
-          alert("Posición no válida.");
         }
         break;
       }
@@ -117,17 +116,19 @@ function simuladorCarrito() {
       case "6": {
         const busqueda = prompt("Ingresá el nombre exacto del producto a buscar en el carrito:");
 
-        if (!busqueda) {
+        if (busqueda) {
+          if (carrito.includes(busqueda)) {
+            const posicion = carrito.indexOf(busqueda);
+            const precio = obtenerPrecio(busqueda);
+            alert(
+              "El producto '" + busqueda + "' está en el carrito (posición " + posicion +
+              ") y su precio es de: $" + precio
+            );
+          } else {
+            alert("El producto '" + busqueda + "' no está en el carrito. Podés agregarlo desde el menú.");
+          }
+        } else if (busqueda !== null) {
           alert("No ingresaste ningún término de búsqueda.");
-        } else if (carrito.includes(busqueda)) {
-          const posicion = carrito.indexOf(busqueda);
-          const precio = obtenerPrecio(busqueda);
-          alert(
-            "El producto '" + busqueda + "' está en el carrito (posición " + posicion +
-            ") y su precio es de: $" + precio
-          );
-        } else {
-          alert("El producto '" + busqueda + "' no está en el carrito. Podés agregarlo desde el menú.");
         }
         break;
       }
