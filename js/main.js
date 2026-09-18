@@ -1,61 +1,150 @@
-// Array inicial
-const listaComponentes = [
-  "Placa de Video RTX 3060",
-  "Placa de Video RTX 4070",
-  "Placa de Video RX 6600",
-  "Procesador Ryzen 5",
-  "Procesador Ryzen 7",
-  "Procesador Core i5"
+// 1. Array de productos iniciales en el carrito
+const carrito = [
+  "Auriculares Redragon",
+  "Teclado Noga",
+  "Mouse GX",
+  "Monitor 24 Pulgadas",
+  "Monitor 27 Pulgadas"
 ];
 
-// 1. Función flecha para obtener el consumo en Watts
-const obtenerConsumoWatts = (componente) => {
-  if (componente === "Placa de Video RX 6700 XT") return 230;
-  if (componente === "Placa de Video RTX 4070") return 200;
-  if (componente === "Placa de Video RTX 3060") return 170;
-  if (componente === "Placa de Video RX 6600") return 132;
-  if (componente === "Procesador Ryzen 7" || componente === "Procesador Core i7") return 105;
-  if (componente === "Procesador Ryzen 5" || componente === "Procesador Core i5") return 65;
-  return 0; // Consumo por defecto si no está en la lista
+// 2. Función flecha para calcular el precio estimado de un producto
+const obtenerPrecio = (producto) => {
+  if (producto === "Auriculares Redragon") {
+    return 45000;
+  }
+  if (producto === "Teclado Noga") {
+    return 60000;
+  }
+  if (producto === "Mouse GX") {
+    return 30000;
+  }
+  if (producto === "Monitor 24 Pulgadas") {
+    return 120000;
+  }
+  if (producto === "Monitor 27 Pulgadas") {
+    return 200000;
+  }
+  if (producto === "Mousepad XL") {
+    return 15000;
+  }
+  return 10000; // Precio para productos no listados
 };
 
-// 2. Función con for...of para mostrar el reporte
-function mostrarReportePC(arrayComponentes) {
-  console.log("--- LISTA COMPLETA DE COMPONENTES ---");
-  for (const componente of arrayComponentes) {
-    console.log("Producto: " + componente);
+// 3. Función con for...of para listar los productos del carrito
+function mostrarCarrito(listaProductos) {
+  console.log("--- ARTÍCULOS EN EL CARRITO ---");
+  for (const producto of listaProductos) {
+    console.log("Producto: " + producto);
   }
 }
 
-// 3. Función principal del simulador
-function simuladorArmadoPC() {
-  // Manipulación dinámica (push y unshift)
-  listaComponentes.push("Procesador Pentium G4560");
-  listaComponentes.unshift("Placa de Video RTX 3050");
+// 4. Función principal interactiva del simulador
+function simuladorCarrito() {
+  let opcion = "";
 
-  // Eliminar el último elemento y mostrarlo
-  const eliminado = listaComponentes.pop();
-  alert("Se ha eliminado por discontinuidad: " + eliminado);
+  while (opcion !== "7" && opcion !== null) {
+    opcion = prompt(
+      "--- MENÚ DEL CARRITO DE COMPRAS ---\n" +
+      "1. Ver artículos en el carrit\n" +
+      "2. Agregar producto al final\n" +
+      "3. Agregar producto prioritario al inicio\n" +
+      "4. Quitar el último producto agregado\n" +
+      "5. Reemplazar un producto de la lista\n" +
+      "6. Buscar producto y consultar precio\n" +
+      "7. Salir\n\n" +
+      "Ingresá el número de la opción que deseas realizar:"
+    );
 
-  // Actualización por índice con splice
-  listaComponentes.splice(2, 1, "Placa de Video RX 6700 XT");
+    switch (opcion) {
+      case "1": {
+        mostrarCarrito(carrito);
+        alert("Visualiza la consola para ver los productos.");
+        break;
+      }
 
-  // Entrada y búsqueda
-  const busqueda = prompt("Ingresá el componente para consultar cuántos Watts gasta:");
+      case "2": {
+        const nuevoProducto = prompt("Ingresá el nombre del producto para sumar al carrito:");
+        if (nuevoProducto) {
+          carrito.push(nuevoProducto);
+          alert("Se agregó '" + nuevoProducto + "' al final del carrito.");
+        } else {
+          alert("No ingresaste un producto válido.");
+        }
+        break;
+      }
 
-  if (!busqueda) {
-    alert("No ingresaste ningún componente para buscar.");
-  } else if (listaComponentes.includes(busqueda)) {
-    const posicion = listaComponentes.indexOf(busqueda);
-    const wattsConsumo = obtenerConsumoWatts(busqueda);
-    alert("En la posición " + posicion + " está '" + busqueda + "' y gasta aproximadamente: " + wattsConsumo + " Watts");
-  } else {
-    alert("El componente '" + busqueda + "' no se encuentra en la lista, por favor verifica la ortografía o el stock.");
+      case "3": {
+        const productoPrioritario = prompt("Ingresá el producto urgente/prioritario a sumar al inicio:");
+        if (productoPrioritario) {
+          carrito.unshift(productoPrioritario);
+          alert("Se agregó '" + productoPrioritario + "' al inicio de la lista.");
+        } else {
+          alert("No ingresaste un producto válido.");
+        }
+        break;
+      }
+
+      case "4": {
+        if (carrito.length > 0) {
+          const eliminado = carrito.pop();
+          alert("Se ha eliminado el elemento: " + eliminado);
+        } else {
+          alert("El carrito ya está vacío, no hay productos para eliminar.");
+        }
+        break;
+      }
+
+      case "5": {
+        const indiceTexto = prompt(
+          "Ingresá la posición (0 a " + (carrito.length - 1) + ") del producto que deseas cambiar:"
+        );
+        const indice = parseInt(indiceTexto);
+
+        if (!isNaN(indice) && indice >= 0 && indice < carrito.length) {
+          const reemplazo = prompt("Ingresá el nombre del nuevo producto:");
+          if (reemplazo) {
+            const anterior = carrito.splice(indice, 1, reemplazo);
+            alert("Se reemplazó '" + anterior[0] + "' por '" + reemplazo + "'.");
+          } else {
+            alert("No ingresaste un nombre válido.");
+          }
+        } else {
+          alert("Posición no válida.");
+        }
+        break;
+      }
+
+      case "6": {
+        const busqueda = prompt("Ingresá el nombre exacto del producto a buscar en el carrito:");
+
+        if (!busqueda) {
+          alert("No ingresaste ningún término de búsqueda.");
+        } else if (carrito.includes(busqueda)) {
+          const posicion = carrito.indexOf(busqueda);
+          const precio = obtenerPrecio(busqueda);
+          alert(
+            "El producto '" + busqueda + "' está en el carrito (posición " + posicion +
+            ") y su precio es de: $" + precio
+          );
+        } else {
+          alert("El producto '" + busqueda + "' no está en el carrito. Podés agregarlo desde el menú.");
+        }
+        break;
+      }
+
+      case "7":
+      case null: {
+        alert("¡Gracias por visitar la tienda!");
+        break;
+      }
+
+      default: {
+        alert("Opción no válida. Por favor, seleccioná un número del 1 al 7.");
+        break;
+      }
+    }
   }
-
-  // Invocación al reporte final
-  mostrarReportePC(listaComponentes);
 }
 
 // Ejecución
-simuladorArmadoPC();
+simuladorCarrito();
