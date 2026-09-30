@@ -13,7 +13,7 @@ class Producto {
       impuesto: this.precio * 0.2,
       total: this.precio
     }
-    
+
     return precios;
   }
 }
@@ -42,10 +42,10 @@ function mostrarCarrito(listaProductos) {
   for (const producto of listaProductos) {
     const precios = producto.verImpuestos();
     console.log(
-      "ID: " + producto.id + 
-      " | Producto: " + producto.nombre + 
-      " | Precio sin impuestos: $" + precios.sinImpuestos + 
-      " | Precio total: $" + producto.precio + 
+      "ID: " + producto.id +
+      " | Producto: " + producto.nombre +
+      " | Precio sin impuestos: $" + precios.sinImpuestos +
+      " | Precio total: $" + producto.precio +
       " | Stock: " + producto.stock
     );
   }
@@ -145,6 +145,7 @@ function reemplazarProductoPorIndice() {
         return;
       }
 
+      if (existeId(id)) {
         alert("Error: Ya existe un producto con el ID " + id + ".");
         return;
       }
