@@ -8,13 +8,11 @@ class Producto {
   }
 
   verImpuestos() {
-    const precios = {
+    return {
       sinImpuestos: this.precio * 0.8,
       impuesto: this.precio * 0.2,
       total: this.precio
-    }
-
-    return precios;
+    };
   }
 }
 
@@ -28,10 +26,25 @@ const carrito = [
 ];
 
 function existeId(idBuscado) {
-  return carrito.some((prod) => prod.id === idBuscado);
+  for (const prod of carrito) {
+    if (prod.id === idBuscado) {
+      return true;
+    }
+  }
+  return false;
 }
 
-// 3. Funciones para manipular el carrito de compras
+function buscarProductoPorNombreOId(termino) {
+  for (let i = 0; i < carrito.length; i++) {
+    const prod = carrito[i];
+    if (prod.nombre.toLowerCase() === termino.toLowerCase() || prod.id.toString() === termino) {
+      return { producto: prod, posicion: i };
+    }
+  }
+  return null;
+}
+
+// 3. Funciones del carrito 
 function mostrarCarrito(listaProductos) {
   if (listaProductos.length === 0) {
     alert("El carrito está vacío.");
@@ -52,77 +65,76 @@ function mostrarCarrito(listaProductos) {
   alert("Visualizá la consola (F12) para ver los productos.");
 }
 
+function pedirDatosProducto() {
+  const nombre = prompt("Ingresá el nombre del producto:");
+  if (!nombre) {
+    alert("Nombre no válido.");
+    return null;
+  }
+
+  const precio = parseFloat(prompt("Ingresá el precio del producto:"));
+  if (isNaN(precio) || precio <= 0) {
+    alert("Precio no válido.");
+    return null;
+  }
+
+  const stock = parseInt(prompt("Ingresá el stock disponible:"));
+  if (isNaN(stock) || stock < 0) {
+    alert("Stock no válido.");
+    return null;
+  }
+
+  return { nombre: nombre, precio: precio, stock: stock };
+}
+
 function agregarProductoFinal() {
   const id = parseInt(prompt("Ingresá el ID del producto:"));
-  if (isNaN(id)) {
+  if (isNaN(id) || id <= 0) {
     alert("ID no válido.");
     return;
   }
 
   if (existeId(id)) {
-    alert("Error: Ya existe un producto con el ID " + id + ". Ingresá un ID diferente.");
+    alert("Error: Ya existe un producto con el ID " + id + ".");
     return;
   }
 
-  const nombre = prompt("Ingresá el nombre del producto para sumar al carrito:");
-  if (nombre) {
-    const precio = parseFloat(prompt("Ingresá el precio del producto:"));
-    if (!isNaN(precio)) {
-      const stock = parseInt(prompt("Ingresá la cantidad de stock disponibles:"));
-      if (!isNaN(stock) && stock >= 0) {
-        const nuevoProducto = new Producto(id, nombre, precio, stock);
-        carrito.push(nuevoProducto);
-        alert("Se agregó '" + nuevoProducto.nombre + "' al final del carrito.");
-      } else {
-        alert("Stock no válido.");
-      }
-    } else {
-      alert("Precio no válido.");
-    }
-  } else if (nombre !== null) {
-    alert("No ingresaste un producto válido.");
+  const datos = pedirDatosProducto();
+  if (datos !== null) {
+    const nuevoProducto = new Producto(id, datos.nombre, datos.precio, datos.stock);
+    carrito.push(nuevoProducto);
+    alert("Se agregó '" + nuevoProducto.nombre + "' al final del carrito.");
   }
 }
 
 function agregarProductoInicio() {
   const id = parseInt(prompt("Ingresá el ID del producto prioritario:"));
-  if (isNaN(id)) {
+  if (isNaN(id) || id <= 0) {
     alert("ID no válido.");
     return;
   }
 
   if (existeId(id)) {
-    alert("Error: Ya existe un producto con el ID " + id + ". Ingresá un ID diferente.");
+    alert("Error: Ya existe un producto con el ID " + id + ".");
     return;
   }
 
-  const nombre = prompt("Ingresá el producto urgente/prioritario a sumar al inicio:");
-  if (nombre) {
-    const precio = parseFloat(prompt("Ingresá el precio del producto:"));
-    if (!isNaN(precio)) {
-      const stock = parseInt(prompt("Ingresá la cantidad de stock disponibles:"));
-      if (!isNaN(stock) && stock >= 0) {
-        const nuevoProducto = new Producto(id, nombre, precio, stock);
-        carrito.unshift(nuevoProducto);
-        alert("Se agregó '" + nuevoProducto.nombre + "' al inicio de la lista.");
-      } else {
-        alert("Stock no válido.");
-      }
-    } else {
-      alert("Precio no válido.");
-    }
-  } else if (nombre !== null) {
-    alert("No ingresaste un producto válido.");
+  const datos = pedirDatosProducto();
+  if (datos !== null) {
+    const nuevoProducto = new Producto(id, datos.nombre, datos.precio, datos.stock);
+    carrito.unshift(nuevoProducto);
+    alert("Se agregó '" + nuevoProducto.nombre + "' al inicio de la lista.");
   }
 }
 
 function quitarUltimoProducto() {
-  if (carrito.length > 0) {
-    const eliminado = carrito.pop();
-    alert("Se ha eliminado el elemento: " + eliminado.nombre);
-  } else {
+  if (carrito.length === 0) {
     alert("El carrito ya está vacío, no hay productos para eliminar.");
+    return;
   }
+
+  const eliminado = carrito.pop();
+  alert("Se ha eliminado el elemento: " + eliminado.nombre);
 }
 
 function reemplazarProductoPorIndice() {
@@ -131,75 +143,57 @@ function reemplazarProductoPorIndice() {
     return;
   }
 
-  const indiceTexto = prompt(
-    "Ingresá la posición (0 a " + (carrito.length - 1) + ") del producto que deseas cambiar:"
-  );
+  const indiceTexto = prompt("Ingresá la posición (0 a " + (carrito.length - 1) + ") del producto a cambiar:");
+  if (indiceTexto === null || indiceTexto === "") return;
 
-  if (indiceTexto !== null && indiceTexto !== "") {
-    const indice = parseInt(indiceTexto);
+  const indice = parseInt(indiceTexto);
+  if (isNaN(indice) || indice < 0 || indice >= carrito.length) {
+    alert("Posición no válida.");
+    return;
+  }
 
-    if (!isNaN(indice) && indice >= 0 && indice < carrito.length) {
-      const id = parseInt(prompt("Ingresá el ID del nuevo producto:"));
-      if (isNaN(id)) {
-        alert("ID no válido.");
-        return;
-      }
+  const id = parseInt(prompt("Ingresá el ID del nuevo producto:"));
+  if (isNaN(id) || id <= 0) {
+    alert("ID no válido.");
+    return;
+  }
 
-      if (existeId(id)) {
-        alert("Error: Ya existe un producto con el ID " + id + ".");
-        return;
-      }
+  if (id !== carrito[indice].id && existeId(id)) {
+    alert("Error: Ya existe otro producto con el ID " + id + ".");
+    return;
+  }
 
-      const nombre = prompt("Ingresá el nombre del nuevo producto:");
-      if (nombre) {
-        const precio = parseFloat(prompt("Ingresá el precio:"));
-        if (!isNaN(precio)) {
-          const stock = parseInt(prompt("Ingresá el stock:"));
-          if (!isNaN(stock) && stock >= 0) {
-            const reemplazo = new Producto(id, nombre, precio, stock);
-            const anterior = carrito.splice(indice, 1, reemplazo);
-            alert("Se reemplazó '" + anterior[0].nombre + "' por '" + reemplazo.nombre + "'.");
-          } else {
-            alert("Stock no válido.");
-          }
-        } else {
-          alert("Precio no válido.");
-        }
-      } else if (nombre !== null) {
-        alert("No ingresaste un nombre válido.");
-      }
-    } else {
-      alert("Posición no válida. Debe ser un número entre 0 y " + (carrito.length - 1) + ".");
-    }
+  const datos = pedirDatosProducto();
+  if (datos !== null) {
+    const reemplazo = new Producto(id, datos.nombre, datos.precio, datos.stock);
+    const anterior = carrito.splice(indice, 1, reemplazo);
+    alert("Se reemplazó '" + anterior[0].nombre + "' por '" + reemplazo.nombre + "'.");
   }
 }
 
 function buscarProductoYConsultarPrecio() {
-  const busqueda = prompt("Ingresá el nombre exacto o ID del producto a buscar en el carrito:");
-
-  if (busqueda) {
-    const productoEncontrado = carrito.find(
-      (prod) => prod.nombre.toLowerCase() === busqueda.toLowerCase() || prod.id.toString() === busqueda
-    );
-
-    if (productoEncontrado) {
-      const posicion = carrito.indexOf(productoEncontrado);
-      const precios = productoEncontrado.verImpuestos();
-      alert(
-        "El producto '[ID: " + productoEncontrado.id + "] " + productoEncontrado.nombre + "' está en el carrito (posición " + posicion +
-        ")\nPrecio sin impuestos: $" + precios.sinImpuestos +
-        "\nPrecio final con impuestos: $" + precios.total +
-        "\nStock disponible: " + productoEncontrado.stock + " unidades"
-      );
-    } else {
-      alert("El producto '" + busqueda + "' no está en el carrito. Podés agregarlo desde el menú.");
-    }
-  } else if (busqueda !== null) {
+  const busqueda = prompt("Ingresá el nombre exacto o ID del producto a buscar:");
+  if (!busqueda) {
     alert("No ingresaste ningún término de búsqueda.");
+    return;
+  }
+
+  const resultado = buscarProductoPorNombreOId(busqueda);
+  if (resultado !== null) {
+    const prod = resultado.producto;
+    const precios = prod.verImpuestos();
+    alert(
+      "El producto '[ID: " + prod.id + "] " + prod.nombre + "' está en el carrito (posición " + resultado.posicion + ")\n" +
+      "Precio sin impuestos: $" + precios.sinImpuestos + "\n" +
+      "Precio final con impuestos: $" + precios.total + "\n" +
+      "Stock disponible: " + prod.stock + " unidades"
+    );
+  } else {
+    alert("El producto '" + busqueda + "' no está en el carrito.");
   }
 }
 
-// 4. Función principal: únicamente controla el flujo y ejecuta las funciones
+// 4. Funcioón principal
 function simuladorCarrito() {
   let opcion = "";
 
@@ -220,32 +214,25 @@ function simuladorCarrito() {
       case "1":
         mostrarCarrito(carrito);
         break;
-
       case "2":
         agregarProductoFinal();
         break;
-
       case "3":
         agregarProductoInicio();
         break;
-
       case "4":
         quitarUltimoProducto();
         break;
-
       case "5":
         reemplazarProductoPorIndice();
         break;
-
       case "6":
         buscarProductoYConsultarPrecio();
         break;
-
       case "7":
       case null:
         alert("¡Gracias por visitar la tienda!");
         break;
-
       default:
         alert("Opción no válida. Por favor, seleccioná un número del 1 al 7.");
         break;
@@ -253,5 +240,4 @@ function simuladorCarrito() {
   }
 }
 
-// Ejecución
 simuladorCarrito();
