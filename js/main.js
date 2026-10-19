@@ -26,22 +26,20 @@ const carrito = [
 ];
 
 function existeId(idBuscado) {
-  for (const prod of carrito) {
-    if (prod.id === idBuscado) {
-      return true;
-    }
-  }
-  return false;
+  return carrito.some(prod => prod.id === idBuscado);
 }
 
 function buscarProductoPorNombreOId(termino) {
-  for (let i = 0; i < carrito.length; i++) {
-    const prod = carrito[i];
-    if (prod.nombre.toLowerCase() === termino.toLowerCase() || prod.id.toString() === termino) {
-      return { producto: prod, posicion: i };
-    }
+  const prod = carrito.find(p => p.nombre.toLowerCase() === termino.toLowerCase() || p.id.toString() === termino);
+  if (prod) {
+    const posicion = carrito.indexOf(prod);
+    return { producto: prod, posicion: posicion };
   }
   return null;
+}
+
+function obtenerProductosConStock() {
+  return carrito.filter(prod => prod.stock > 0);
 }
 
 // 3. Funciones del carrito 
@@ -52,7 +50,7 @@ function mostrarCarrito(listaProductos) {
   }
 
   console.log("--- ARTÍCULOS EN EL CARRITO ---");
-  for (const producto of listaProductos) {
+  listaProductos.forEach(producto => {
     const precios = producto.verImpuestos();
     console.log(
       "ID: " + producto.id +
@@ -61,7 +59,7 @@ function mostrarCarrito(listaProductos) {
       " | Precio total: $" + producto.precio +
       " | Stock: " + producto.stock
     );
-  }
+  });
   alert("Visualizá la consola (F12) para ver los productos.");
 }
 
@@ -193,7 +191,7 @@ function buscarProductoYConsultarPrecio() {
   }
 }
 
-// 4. Funcioón principal
+// 4. Función principal
 function simuladorCarrito() {
   let opcion = "";
 
@@ -212,7 +210,7 @@ function simuladorCarrito() {
 
     switch (opcion) {
       case "1":
-        mostrarCarrito(carrito);
+        mostrarCarrito(obtenerProductosConStock());
         break;
       case "2":
         agregarProductoFinal();
