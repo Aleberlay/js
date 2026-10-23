@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sexta entrega Berlay</title>
+  <title>Séptima entrega Berlay</title>
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/main.js" defer></script>
 </head>
@@ -13,7 +13,20 @@
 
   <div class="card">
     <h1>Simulador de Carrito de Compras</h1>
-    <p>Utiliza la consola para interactuar con el simulador</p>
+
+    <div class="formulario">
+      <input type="number" id="input-id" placeholder="ID del producto">
+      <input type="text" id="input-nombre" placeholder="Nombre del producto">
+      <input type="number" id="input-precio" placeholder="Precio">
+      <input type="number" id="input-stock" placeholder="Stock">
+      <button id="btn-agregar" class="btn">Agregar Producto</button>
+    </div>
+
+    <div class="buscador" style="margin-top: 15px;">
+      <input type="text" id="input-buscar" placeholder="Buscar producto...">
+    </div>
+
+    <div id="contenedor"></div>
   </div>
 
 </body>
