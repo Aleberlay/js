@@ -33,3 +33,54 @@ p {
   font-size: 0.95rem;
   margin-bottom: 20px;
 }
+
+.formulario input, .buscador input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: transparent;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.btn {
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.producto-card {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.btn-eliminar {
+  background-color: #ef4444;
+  margin-top: 8px;
+}
+
+.mensaje {
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.mensaje.exito {
+  background-color: #065f46;
+  color: #6ee7b7;
+}
+
+.mensaje.error {
+  background-color: #991b1b;
+  color: #fca5a5;
+}

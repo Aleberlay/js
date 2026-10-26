@@ -1,11 +1,17 @@
-// 1. Base de datos
-const carrito = [
+// 1. Base de datos con
+const productosPorDefecto = [
   { id: 1, nombre: "Auriculares Redragon", precio: 45000, stock: 10 },
   { id: 2, nombre: "Teclado Noga", precio: 60000, stock: 5 },
   { id: 3, nombre: "Mouse GX", precio: 30000, stock: 15 },
   { id: 4, nombre: "Monitor 24 Pulgadas", precio: 120000, stock: 8 },
   { id: 5, nombre: "Monitor 27 Pulgadas", precio: 200000, stock: 3 }
 ];
+
+let carrito = JSON.parse(localStorage.getItem("carrito")) ?? productosPorDefecto;
+
+function sincronizarStorage() {
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+}
 
 function calcularImpuestos(precio) {
   return {
@@ -46,17 +52,19 @@ function mostrarCarrito(listaProductos) {
   }
 
   listaProductos.forEach(producto => {
-    const precios = calcularImpuestos(producto.precio);
+    const { id, nombre, precio, stock } = producto;
+    const { sinImpuestos, total } = calcularImpuestos(precio);
+
     const tarjeta = document.createElement("div");
     tarjeta.className = "producto-card";
 
     tarjeta.innerHTML = `
-      <h3>${producto.nombre}</h3>
-      <p>ID: ${producto.id}</p>
-      <p>Precio sin impuestos: $${precios.sinImpuestos}</p>
-      <p>Precio total: $${producto.precio}</p>
-      <p>Stock: ${producto.stock}</p>
-      <button class="btn btn-eliminar" data-id="${producto.id}">Eliminar</button>
+      <h3>${nombre}</h3>
+      <p>ID: ${id}</p>
+      <p>Precio sin impuestos: $${sinImpuestos}</p>
+      <p>Precio total: $${total}</p>
+      <p>Stock: ${stock}</p>
+      <button class="btn btn-eliminar" data-id="${id}">Eliminar</button>
     `;
 
     contenedor.appendChild(tarjeta);
@@ -67,15 +75,18 @@ function mostrarCarrito(listaProductos) {
     boton.addEventListener("click", (event) => {
       const idAEliminar = parseInt(event.target.getAttribute("data-id"));
       const indice = carrito.findIndex(prod => prod.id === idAEliminar);
+
       if (indice !== -1) {
-        const eliminado = carrito.splice(indice, 1)[0];
+        const [eliminado] = carrito.splice(indice, 1);
+        sincronizarStorage();
         mostrarCarrito(carrito);
-        mostrarMensaje(`Se eliminó "${eliminado.nombre}" correctamente.`);
+        mostrarMensaje(`Se eliminó "${eliminado.nombre}" del carrito.`);
       }
     });
   });
 }
 
+// 5. Agregar producto
 function agregarProductoFinal() {
   const id = parseInt(inputId.value);
   const nombre = inputNombre.value.trim();
@@ -103,8 +114,10 @@ function agregarProductoFinal() {
     return;
   }
 
-  const nuevoProducto = { id: id, nombre: nombre, precio: precio, stock: stock };
+  const nuevoProducto = { id, nombre, precio, stock };
   carrito.push(nuevoProducto);
+
+  sincronizarStorage();
 
   inputId.value = "";
   inputNombre.value = "";
