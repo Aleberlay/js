@@ -1,4 +1,4 @@
-// 1. Base de datos con
+// 1. Base de datos
 const productosPorDefecto = [
   { id: 1, nombre: "Auriculares Redragon", precio: 45000, stock: 10 },
   { id: 2, nombre: "Teclado Noga", precio: 60000, stock: 5 },
@@ -7,7 +7,7 @@ const productosPorDefecto = [
   { id: 5, nombre: "Monitor 27 Pulgadas", precio: 200000, stock: 3 }
 ];
 
-let carrito = JSON.parse(localStorage.getItem("carrito")) ?? productosPorDefecto;
+let carrito = [];
 
 function sincronizarStorage() {
   localStorage.setItem("carrito", JSON.stringify(carrito));
@@ -34,6 +34,7 @@ const inputStock = document.getElementById("input-stock");
 const btnAgregar = document.getElementById("btn-agregar");
 const inputBuscar = document.getElementById("input-buscar");
 const contenedorMensaje = document.getElementById("mensaje");
+const avisoPromo = document.getElementById("aviso-promo");
 
 // 3. Feedback visual en pantalla
 function mostrarMensaje(texto, esError = false) {
@@ -57,7 +58,6 @@ function mostrarCarrito(listaProductos) {
 
     const tarjeta = document.createElement("div");
     tarjeta.className = "producto-card";
-
     tarjeta.innerHTML = `
       <h3>${nombre}</h3>
       <p>ID: ${id}</p>
@@ -116,7 +116,6 @@ function agregarProductoFinal() {
 
   const nuevoProducto = { id, nombre, precio, stock };
   carrito.push(nuevoProducto);
-
   sincronizarStorage();
 
   inputId.value = "";
@@ -138,4 +137,41 @@ inputBuscar.addEventListener("input", () => {
   mostrarCarrito(filtrados);
 });
 
-mostrarCarrito(carrito);
+// 6. Asincronismo, Promesas y Temporizador
+function pedirProductos() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const datosGuardados = JSON.parse(localStorage.getItem("carrito"));
+      const datos = datosGuardados ?? productosPorDefecto;
+
+      if (datos) {
+        resolve(datos);
+      } else {
+        reject(new Error("Error al leer productos"));
+      }
+    }, 2000);
+  });
+}
+
+async function cargarSimulador() {
+  mostrarMensaje("⏳ Cargando productos...");
+  try {
+    const productos = await pedirProductos();
+    carrito = productos;
+    mostrarCarrito(carrito);
+    mostrarMensaje(`✔️ ${carrito.length} productos cargados`);
+  } catch (error) {
+    mostrarMensaje("⚠️ No se pudo procesar la operación, intentá de nuevo", true);
+  } finally {
+    console.log("Proceso de carga completado");
+  }
+}
+
+setTimeout(() => {
+  if (avisoPromo) {
+    avisoPromo.textContent = "20% de descuento en todos los productos con el código PROMO20. ¡Aprovechá ahora!";
+    avisoPromo.style.display = "block";
+  }
+}, 3000);
+
+cargarSimulador();

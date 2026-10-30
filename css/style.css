@@ -34,7 +34,8 @@ p {
   margin-bottom: 20px;
 }
 
-.formulario input, .buscador input {
+.formulario input,
+.buscador input {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -83,4 +84,15 @@ p {
 .mensaje.error {
   background-color: #991b1b;
   color: #fca5a5;
+}
+
+.aviso {
+  display: none;
+  background-color: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  color: #c7d2fe;
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
 }
