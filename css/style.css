@@ -49,13 +49,26 @@ p {
   text-align: center;
 }
 
-.btn {
+.btn,
+.btn-agregar-carrito {
   background-color: #6366f1;
   color: white;
   border: none;
   padding: 8px 12px;
   border-radius: 5px;
   cursor: pointer;
+<<<<<<< HEAD
+=======
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover,
+.btn-agregar-carrito:hover {
+  background-color: #4f46e5;
+>>>>>>> 41f15c6e0909ab75353849b1e9cfb3c606881750
 }
 
 .producto-card {
@@ -87,8 +100,13 @@ p {
   margin: 0;
 }
 
+<<<<<<< HEAD
 .btn-eliminar {
   background-color: #ef4444;
+=======
+.producto-card p {
+  margin: 5px 0;
+>>>>>>> 41f15c6e0909ab75353849b1e9cfb3c606881750
 }
 
 .resumen-carrito {

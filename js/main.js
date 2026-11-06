@@ -4,9 +4,30 @@ let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 function sincronizarStorage() {
     localStorage.setItem("carrito", JSON.stringify(carrito));
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+}
+
+function cargarStorageCarrito() {
+    try {
+        const itemGuardado = localStorage.getItem("carrito");
+        if (itemGuardado) {
+            const datosGuardados = JSON.parse(itemGuardado);
+            if (Array.isArray(datosGuardados)) {
+                carrito = datosGuardados;
+            }
+        }
+    } catch (error) {
+        console.error("Error al leer el carrito de localStorage:", error);
+        carrito = [];
+    }
 }
 
 function calcularImpuestos(precio) {
+    return {
+        sinImpuestos: (precio * 0.8).toFixed(2),
+        impuesto: (precio * 0.2).toFixed(2),
+        total: precio.toFixed(2)
+    };
     return {
         sinImpuestos: (precio * 0.8).toFixed(2),
         impuesto: (precio * 0.2).toFixed(2),
@@ -229,6 +250,11 @@ async function pedirProductos() {
 
 function iniciarAvisoPromo() {
     setTimeout(() => {
+        if (avisoPromo) {
+            avisoPromo.textContent = "20% de descuento en todos los productos con el código PROMO20. ¡Aprovechá ahora!";
+            avisoPromo.style.display = "block";
+        }
+    }, 1000);
         if (avisoPromo) {
             avisoPromo.textContent = "20% de descuento en todos los productos con el código PROMO20. ¡Aprovechá ahora!";
             avisoPromo.style.display = "block";
