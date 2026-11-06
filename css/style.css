@@ -8,6 +8,7 @@ body {
   min-height: 100vh;
   margin: 0;
   text-align: center;
+  padding: 20px 0;
 }
 
 .card {
@@ -16,74 +17,98 @@ body {
   border-radius: 12px;
   padding: 40px;
   text-align: center;
-  max-width: 400px;
+  max-width: 500px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  width: 100%;
+  width: 90%;
   box-sizing: border-box;
 }
 
-h1 {
-  margin-top: 0;
+h1,
+h2,
+h3 {
+  margin: 15px 0 10px;
   color: #ffffff;
-  font-size: 1.8rem;
 }
 
 p {
   color: #c7d2fe;
   font-size: 0.95rem;
-  margin-bottom: 20px;
+  margin: 10px 0;
 }
 
-.formulario input,
 .buscador input {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
+  margin-top: 15px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 5px;
   background: transparent;
   color: #fff;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .btn {
   background-color: #6366f1;
   color: white;
   border: none;
-  padding: 10px;
+  padding: 8px 12px;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%;
 }
 
 .producto-card {
   background-color: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  margin-top: 10px;
+  padding: 20px 15px;
+  margin-top: 15px;
   border-radius: 5px;
-  text-align: left;
+  text-align: center;
+}
+
+.producto-card .btn {
+  margin-top: 10px;
+  width: 80%;
+}
+
+.item-carrito {
+  background-color: rgba(255, 255, 255, 0.04);
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-carrito p {
+  margin: 0;
 }
 
 .btn-eliminar {
   background-color: #ef4444;
-  margin-top: 8px;
 }
 
-.mensaje {
-  margin: 10px 0;
-  padding: 8px;
-  border-radius: 5px;
+.resumen-carrito {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 15px;
 }
 
-.mensaje.exito {
-  background-color: #065f46;
-  color: #6ee7b7;
+
+
+.btn-vaciar {
+    background-color: #d9534f;
 }
 
-.mensaje.error {
-  background-color: #991b1b;
-  color: #fca5a5;
+.btn-finalizar {
+    background-color: #28a745;
 }
 
 .aviso {

@@ -2,36 +2,44 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Novena entrega Berlay</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/main.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Carrito de Compras</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script src="js/main.js" defer></script>
 </head>
 
 <body>
 
-  <div class="card">
-    <div id="aviso-promo" class="aviso"></div>
+    <div class="card">
+        <div id="aviso-promo" class="aviso"></div>
 
-    <h1>Simulador de Carrito de Compras</h1>
+        <h1>Simulador de Carrito de Compras</h1>
 
-    <div class="formulario">
-      <input type="number" id="input-id" placeholder="ID del producto">
-      <input type="text" id="input-nombre" placeholder="Nombre del producto">
-      <input type="number" id="input-precio" placeholder="Precio">
-      <input type="number" id="input-stock" placeholder="Stock">
-      <button id="btn-agregar" class="btn">Agregar Producto</button>
+        <div class="buscador">
+            <input type="text" id="input-buscar" placeholder="Buscar producto en el catálogo...">
+        </div>
+
+        <h2>Productos Disponibles</h2>
+        <div id="contenedor-catalogo"></div>
+
+        <hr style="margin: 30px 0;">
+
+        <h2>Tu Carrito</h2>
+        <div id="contenedor-carrito"></div>
+
+        <div class="resumen-carrito">
+            <h3>Total a pagar: $<span id="total-carrito">0</span></h3>
+            <button id="btn-vaciar" class="btn" style="background-color: #d9534f; color: white;">Vaciar Carrito</button>
+            <button id="btn-finalizar" class="btn" style="background-color: #28a745; color: white;">Finalizar Compra</button>
+        </div>
+        
     </div>
-
-    <div id="mensaje"></div>
-
-    <div class="buscador" style="margin-top: 15px;">
-      <input type="text" id="input-buscar" placeholder="Buscar producto...">
-    </div>
-
-    <div id="contenedor"></div>
-  </div>
 
 </body>
 
