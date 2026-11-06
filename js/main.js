@@ -4,30 +4,9 @@ let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 function sincronizarStorage() {
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-}
-
-function cargarStorageCarrito() {
-    try {
-        const itemGuardado = localStorage.getItem("carrito");
-        if (itemGuardado) {
-            const datosGuardados = JSON.parse(itemGuardado);
-            if (Array.isArray(datosGuardados)) {
-                carrito = datosGuardados;
-            }
-        }
-    } catch (error) {
-        console.error("Error al leer el carrito de localStorage:", error);
-        carrito = [];
-    }
 }
 
 function calcularImpuestos(precio) {
-    return {
-        sinImpuestos: (precio * 0.8).toFixed(2),
-        impuesto: (precio * 0.2).toFixed(2),
-        total: precio.toFixed(2)
-    };
     return {
         sinImpuestos: (precio * 0.8).toFixed(2),
         impuesto: (precio * 0.2).toFixed(2),
@@ -40,9 +19,9 @@ const contenedorCatalogo = document.getElementById("contenedor-catalogo");
 const contenedorCarrito = document.getElementById("contenedor-carrito");
 const totalCarrito = document.getElementById("total-carrito");
 const btnVaciar = document.getElementById("btn-vaciar");
+const btnFinalizar = document.getElementById("btn-finalizar");
 const inputBuscar = document.getElementById("input-buscar");
 const avisoPromo = document.getElementById("aviso-promo");
-const btnFinalizar = document.getElementById("btn-finalizar");
 
 // 3. Feedback visual en pantalla
 function mostrarMensaje(texto, esError = false) {
@@ -65,26 +44,26 @@ function mostrarMensaje(texto, esError = false) {
 function renderizarProductos(lista) {
     if (!contenedorCatalogo) return;
     contenedorCatalogo.innerHTML = "";
-
+    
     if (lista.length === 0) {
         contenedorCatalogo.innerHTML = "<p>No hay productos para mostrar.</p>";
         return;
     }
-
+    
     lista.forEach(producto => {
         const { id, nombre, precio } = producto;
         const { sinImpuestos, total } = calcularImpuestos(precio);
-
+        
         const tarjeta = document.createElement("div");
         tarjeta.className = "producto-card";
         tarjeta.innerHTML = `
-            ${nombre}<br>
-            Precio sin impuestos: $${sinImpuestos}<br>
-            Precio total: $${total}<br>
-            <button id="btn-agregar-${id}" class="btn">Agregar al carrito</button>
+            <h3>${nombre}</h3>
+            <p>Precio sin impuestos: $${sinImpuestos}</p>
+            <p>Precio total: $${total}</p>
+            <button id="btn-agregar-${id}" class="btn btn-agregar">Agregar al carrito</button>
         `;
         contenedorCatalogo.appendChild(tarjeta);
-
+        
         const boton = document.getElementById(`btn-agregar-${id}`);
         if (boton) {
             boton.addEventListener("click", () => {
@@ -98,7 +77,7 @@ function renderizarProductos(lista) {
 function agregarAlCarrito(id) {
     const productoElegido = productos.find(prod => prod.id === id);
     const productoEnCarrito = carrito.find(prod => prod.id === id);
-
+    
     if (productoEnCarrito) {
         productoEnCarrito.cantidad++;
     } else {
@@ -109,7 +88,7 @@ function agregarAlCarrito(id) {
             cantidad: 1
         });
     }
-
+    
     sincronizarStorage();
     mostrarCarrito();
     mostrarMensaje(`¡"${productoElegido.nombre}" agregado al carrito!`);
@@ -117,10 +96,10 @@ function agregarAlCarrito(id) {
 
 function cambiarCantidad(id, cambio) {
     const item = carrito.find(prod => prod.id === id);
-
+    
     if (item) {
         item.cantidad += cambio;
-
+        
         if (item.cantidad <= 0) {
             eliminarDelCarrito(id);
         } else {
@@ -132,7 +111,7 @@ function cambiarCantidad(id, cambio) {
 
 function eliminarDelCarrito(id) {
     const indice = carrito.findIndex(prod => prod.id === id);
-
+    
     if (indice !== -1) {
         const [eliminado] = carrito.splice(indice, 1);
         sincronizarStorage();
@@ -146,15 +125,11 @@ function vaciarCarrito() {
         mostrarMensaje("El carrito ya está vacío.", true);
         return;
     }
-
+    
     carrito = [];
     sincronizarStorage();
     mostrarCarrito();
     mostrarMensaje("Se vació todo el carrito.", true);
-}
-
-if (btnVaciar) {
-    btnVaciar.addEventListener("click", vaciarCarrito);
 }
 
 function finalizarCompra() {
@@ -162,12 +137,15 @@ function finalizarCompra() {
         mostrarMensaje("El carrito está vacío, no hay nada para comprar.", true);
         return;
     }
-
-    mostrarMensaje("¡Gracias por tu compra! Tu pedido fue procesado.");
-
+    
+    mostrarMensaje("¡Gracias por tu compra! Tu pedido fue procesado con éxito.");
     carrito = [];
     sincronizarStorage();
     mostrarCarrito();
+}
+
+if (btnVaciar) {
+    btnVaciar.addEventListener("click", vaciarCarrito);
 }
 
 if (btnFinalizar) {
@@ -178,49 +156,39 @@ if (btnFinalizar) {
 function mostrarCarrito() {
     if (!contenedorCarrito) return;
     contenedorCarrito.innerHTML = "";
-
+    
     if (carrito.length === 0) {
         contenedorCarrito.innerHTML = "<p>El carrito está vacío.</p>";
         if (totalCarrito) totalCarrito.textContent = "0";
         return;
     }
-
+    
     carrito.forEach(producto => {
         const subtotal = (producto.precio * producto.cantidad).toFixed(2);
-
+        
         const fila = document.createElement("div");
         fila.className = "item-carrito";
         fila.innerHTML = `
-            ${producto.nombre} - $${producto.precio} x ${producto.cantidad} = $${subtotal}
-            <button id="btn-restar-${producto.id}">-</button>
-            <button id="btn-sumar-${producto.id}">+</button>
-            <button id="btn-eliminar-${producto.id}">🗑️</button>
+            <p>${producto.nombre} - $${producto.precio} x ${producto.cantidad} = $${subtotal}</p>
+            <div>
+                <button id="btn-restar-${producto.id}" class="btn">-</button>
+                <button id="btn-sumar-${producto.id}" class="btn">+</button>
+                <button id="btn-eliminar-${producto.id}" class="btn btn-eliminar">🗑️</button>
+            </div>
         `;
         contenedorCarrito.appendChild(fila);
-
-        const btnRestar = document.getElementById(`btn-restar-${producto.id}`);
-        const btnSumar = document.getElementById(`btn-sumar-${producto.id}`);
-        const btnEliminar = document.getElementById(`btn-eliminar-${producto.id}`);
-
-        if (btnRestar) {
-            btnRestar.addEventListener("click", () => {
-                cambiarCantidad(producto.id, -1);
-            });
-        }
-
-        if (btnSumar) {
-            btnSumar.addEventListener("click", () => {
-                cambiarCantidad(producto.id, 1);
-            });
-        }
-
-        if (btnEliminar) {
-            btnEliminar.addEventListener("click", () => {
-                eliminarDelCarrito(producto.id);
-            });
-        }
+        
+        document.getElementById(`btn-restar-${producto.id}`).addEventListener("click", () => {
+            cambiarCantidad(producto.id, -1);
+        });
+        document.getElementById(`btn-sumar-${producto.id}`).addEventListener("click", () => {
+            cambiarCantidad(producto.id, 1);
+        });
+        document.getElementById(`btn-eliminar-${producto.id}`).addEventListener("click", () => {
+            eliminarDelCarrito(producto.id);
+        });
     });
-
+    
     const total = carrito.reduce((acc, prod) => acc + (prod.precio * prod.cantidad), 0);
     if (totalCarrito) totalCarrito.textContent = total.toFixed(2);
 }
@@ -229,7 +197,7 @@ function mostrarCarrito() {
 if (inputBuscar) {
     inputBuscar.addEventListener("input", () => {
         const termino = inputBuscar.value.toLowerCase().trim();
-        const filtrados = productos.filter(prod =>
+        const filtrados = productos.filter(prod => 
             prod.nombre.toLowerCase().includes(termino)
         );
         renderizarProductos(filtrados);
@@ -239,11 +207,11 @@ if (inputBuscar) {
 // 8. Asincronismo: fetch de productos y manejo de errores
 async function pedirProductos() {
     const respuesta = await fetch("./db/data.json");
-
+    
     if (!respuesta.ok) {
         throw new Error(`Error en la petición: status ${respuesta.status}`);
     }
-
+    
     const productosDesdeJson = await respuesta.json();
     return productosDesdeJson;
 }
@@ -255,20 +223,15 @@ function iniciarAvisoPromo() {
             avisoPromo.style.display = "block";
         }
     }, 1000);
-        if (avisoPromo) {
-            avisoPromo.textContent = "20% de descuento en todos los productos con el código PROMO20. ¡Aprovechá ahora!";
-            avisoPromo.style.display = "block";
-        }
-    }, 1000);
 }
 
 async function cargarSimulador() {
     if (contenedorCatalogo) {
         contenedorCatalogo.innerHTML = "<p>⏳ Cargando productos del catálogo...</p>";
     }
-
+    
     mostrarMensaje("⏳ Cargando catálogo...");
-
+    
     try {
         iniciarAvisoPromo();
         const productosDesdeJson = await pedirProductos();
@@ -279,7 +242,7 @@ async function cargarSimulador() {
     } catch (error) {
         mostrarMensaje(`⚠️ ${error.message}`, true);
         console.error("Detalle del error de fetch:", error);
-
+        
         if (contenedorCatalogo) {
             contenedorCatalogo.innerHTML = "<p>⚠️ Ocurrió un error al cargar los productos. Por favor, intentá nuevamente más tarde.</p>";
         }
@@ -287,4 +250,5 @@ async function cargarSimulador() {
         console.log("Proceso de carga completado");
     }
 }
+
 cargarSimulador();
