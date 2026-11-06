@@ -139,39 +139,52 @@ inputBuscar.addEventListener("input", () => {
 
 // 6. Asincronismo, Promesas y Temporizador
 function pedirProductos() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const datosGuardados = JSON.parse(localStorage.getItem("carrito"));
-      const datos = datosGuardados ?? productosPorDefecto;
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            try {
+                const item = localStorage.getItem("carrito");
+                let datos;
+                
+                if (item !== null) {
+                    datos = JSON.parse(item);
+                    if (!Array.isArray(datos)) {
+                        throw new Error("El contenido no es una lista válida");
+                    }
+                } else {
+                    datos = productosPorDefecto;
+                }
+                
+                resolve(datos);
+            } catch (error) {
+                reject(new Error("Fallo al procesar el almacenamiento local: " + error.message));
+            }
+        }, 2000);
+    });
+}
 
-      if (datos) {
-        resolve(datos);
-      } else {
-        reject(new Error("Error al leer productos"));
-      }
-    }, 2000);
-  });
+function iniciarAvisoPromocional(retardoSegundos = 3) {
+    setTimeout(() => {
+        if (avisoPromo) {
+            avisoPromo.textContent = "20% de descuento en todos los productos con el código PROMO20. ¡Aprovechá ahora!";
+            avisoPromo.style.display = "block";
+        }
+    }, retardoSegundos * 1000);
 }
 
 async function cargarSimulador() {
-  mostrarMensaje("⏳ Cargando productos...");
-  try {
-    const productos = await pedirProductos();
-    carrito = productos;
-    mostrarCarrito(carrito);
-    mostrarMensaje(`✔️ ${carrito.length} productos cargados`);
-  } catch (error) {
-    mostrarMensaje("⚠️ No se pudo procesar la operación, intentá de nuevo", true);
-  } finally {
-    console.log("Proceso de carga completado");
-  }
+    mostrarMensaje("⏳ Cargando productos...");
+    
+    try {
+        const productos = await pedirProductos();
+        carrito = productos;
+        mostrarCarrito(carrito);
+        mostrarMensaje(`✔️ ${carrito.length} productos cargados`);
+    } catch (error) {
+        mostrarMensaje("⚠️ No se pudo procesar la operación, intentá de nuevo", true);
+    } finally {
+        console.log("Proceso de carga completado");
+        iniciarAvisoPromocional(3);
+    }
 }
-
-setTimeout(() => {
-  if (avisoPromo) {
-    avisoPromo.textContent = "20% de descuento en todos los productos con el código PROMO20. ¡Aprovechá ahora!";
-    avisoPromo.style.display = "block";
-  }
-}, 3000);
 
 cargarSimulador();
