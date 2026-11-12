@@ -4,22 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Carrito de Compras</title>
+    <title>Tienda Tori</title>
+
     <link rel="stylesheet" href="css/style.css">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+    <script src="js/ui.js" defer></script>
     <script src="js/main.js" defer></script>
 </head>
 
 <body>
 
     <div class="card">
-        <div id="aviso-promo" class="aviso"></div>
+        <div id="aviso-promo" class="aviso oculto"></div>
 
-        <h1>Simulador de Carrito de Compras</h1>
+        <h1>Tienda Tori</h1>
 
         <div class="buscador">
             <input type="text" id="input-buscar" placeholder="Buscar producto en el catálogo...">
@@ -28,22 +29,46 @@
         <h2>Productos Disponibles</h2>
         <div id="contenedor-catalogo"></div>
 
-        <hr style="margin: 30px 0;">
+        <hr>
 
         <h2>Tu Carrito</h2>
         <div id="contenedor-carrito"></div>
 
         <div class="resumen-carrito">
             <h3>Total a pagar: $<span id="total-carrito">0</span></h3>
-            <button id="btn-vaciar" class="btn" style="background-color: #d9534f; color: white;">Vaciar Carrito</button>
-            <button id="btn-finalizar" class="btn" style="background-color: #28a745; color: white;">Finalizar Compra</button>
+            <button id="btn-vaciar" class="btn btn-vaciar">Vaciar Carrito</button>
+            <button id="btn-finalizar" class="btn btn-finalizar">Finalizar Compra</button>
         </div>
-        
+
+        <div id="seccion-checkout" class="seccion-checkout oculto">
+            <h2>Resumen de compra</h2>
+            <div id="checkout-detalle" class="checkout-detalle"></div>
+
+            <div class="checkout-cupon">
+                <input type="text" id="input-cupon" placeholder="Código de descuento">
+                <button id="btn-cupon" class="btn">Aplicar</button>
+            </div>
+
+            <div class="checkout-form">
+                <input type="text" id="checkout-nombre" placeholder="Nombre y Apellido">
+                <input type="email" id="checkout-email" placeholder="Correo Electrónico">
+                <input type="number" id="checkout-telefono" placeholder="Teléfono (ej. 11 02110211)">
+                <input type="text" id="checkout-direccion" placeholder="Dirección y Altura">
+                <button id="btn-confirmar-compra" class="btn btn-finalizar btn-bloque">Pagar y Confirmar</button>
+            </div>
+
+            <div id="resumen-confirmacion" class="oculto">
+                <h3>¡Compra confirmada!</h3>
+                <h4>CVU para abonar el pedido: 0000003100099758553601</h4>
+                <div id="detalle-cliente"></div>
+                <div id="detalle-productos"></div>
+                <p id="detalle-total" class="total-destacado"></p>
+                <p class="aviso-pago">Se ha enviado el resumen a su correo electrónico. <br> Una vez
+                    abonado nos comunicaremos a su Whatsapp en las siguientes 24hs, o puede
+                    comunicarse al siguiente: <a href="https://wa.link/76bjk8" target="_blank">+54 11 0211-0211</a>.</p>
+            </div>
+        </div>
     </div>
-
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-  <script src="js/main.js"></script>
 
 </body>
 
